@@ -29,11 +29,12 @@ THIS_DIRECTORY_RELATIVE = Path(__file__).parent.relative_to(PROJECT_ROOT_PATH)
 # Should be "private_gpt/ui/avatar-bot.ico"
 AVATAR_BOT = THIS_DIRECTORY_RELATIVE / "avatar-bot.ico"
 
-UI_TAB_TITLE = "My Private GPT"
+UI_TAB_TITLE = "sindical-GPT"
 
 SOURCES_SEPARATOR = "\n\n Sources: \n"
 
-MODES = ["Query Files", "Search Files", "LLM Chat (no context from files)"]
+#MODES = ["Query Files", "Search Files", "LLM Chat (no context from files)"]
+MODES = ["Query Files"]
 
 
 class Source(BaseModel):
@@ -164,26 +165,26 @@ class PrivateGptUi:
                     context_filter=context_filter,
                 )
                 yield from yield_deltas(query_stream)
-            case "LLM Chat (no context from files)":
-                llm_stream = self._chat_service.stream_chat(
-                    messages=all_messages,
-                    use_context=False,
-                )
-                yield from yield_deltas(llm_stream)
+#            case "LLM Chat (no context from files)":
+#                llm_stream = self._chat_service.stream_chat(
+#                    messages=all_messages,
+#                    use_context=False,
+#                )
+#                yield from yield_deltas(llm_stream)
 
-            case "Search Files":
-                response = self._chunks_service.retrieve_relevant(
-                    text=message, limit=4, prev_next_chunks=0
-                )
-
-                sources = Source.curate_sources(response)
-
-                yield "\n\n\n".join(
-                    f"{index}. **{source.file} "
-                    f"(page {source.page})**\n "
-                    f"{source.text}"
-                    for index, source in enumerate(sources, start=1)
-                )
+#            case "Search Files":
+#                response = self._chunks_service.retrieve_relevant(
+#                    text=message, limit=4, prev_next_chunks=0
+#                )
+#
+#                sources = Source.curate_sources(response)
+#
+#                yield "\n\n\n".join(
+#                    f"{index}. **{source.file} "
+#                    f"(page {source.page})**\n "
+#                    f"{source.text}"
+#                    for index, source in enumerate(sources, start=1)
+#                )
 
     # On initialization and on mode change, this function set the system prompt
     # to the default prompt based on the mode (and user settings).
@@ -195,8 +196,8 @@ class PrivateGptUi:
             case "Query Files":
                 p = settings().ui.default_query_system_prompt
             # For chat mode, obtain default system prompt from settings
-            case "LLM Chat (no context from files)":
-                p = settings().ui.default_chat_system_prompt
+#            case "LLM Chat (no context from files)":
+#                p = settings().ui.default_chat_system_prompt
             # For any other mode, clear the system prompt
             case _:
                 p = ""
