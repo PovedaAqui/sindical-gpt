@@ -327,7 +327,7 @@ class PrivateGptUi:
                         label="Mode",
                         value="Query Files",
                     )
-                    upload_button = gr.components.UploadButton(
+                    """ upload_button = gr.components.UploadButton(
                         "Upload File(s)",
                         type="filepath",
                         file_count="multiple",
@@ -401,7 +401,7 @@ class PrivateGptUi:
                             deselect_file_button,
                             selected_text,
                         ],
-                    )
+                    ) """
                     system_prompt_input = gr.Textbox(
                         placeholder=self._system_prompt,
                         label="System Prompt",
@@ -476,7 +476,7 @@ class PrivateGptUi:
                                 AVATAR_BOT,
                             ),
                         ),
-                        additional_inputs=[mode, upload_button, system_prompt_input],
+                        #additional_inputs=[mode, upload_button, system_prompt_input],
                     )
         return blocks
 
