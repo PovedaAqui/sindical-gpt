@@ -147,17 +147,20 @@ class PrivateGptUi:
         match mode:
             case "Query Files":
 
+                # Always use all documents for the query (added)
+                docs_ids = [doc.doc_id for doc in self._ingest_service.list_ingested()]
                 # Use only the selected file for the query
                 context_filter = None
-                if self._selected_filename is not None:
+                """if self._selected_filename is not None:
                     docs_ids = []
                     for ingested_document in self._ingest_service.list_ingested():
                         if (
                             ingested_document.doc_metadata["file_name"]
                             == self._selected_filename
                         ):
-                            docs_ids.append(ingested_document.doc_id)
-                    context_filter = ContextFilter(docs_ids=docs_ids)
+                            docs_ids.append(ingested_document.doc_id)"""
+
+                context_filter = ContextFilter(docs_ids=docs_ids)
 
                 query_stream = self._chat_service.stream_chat(
                     messages=all_messages,
@@ -168,17 +171,17 @@ class PrivateGptUi:
 #            case "LLM Chat (no context from files)":
 #                llm_stream = self._chat_service.stream_chat(
 #                    messages=all_messages,
-#                    use_context=False,
+#                   use_context=False,
 #                )
-#                yield from yield_deltas(llm_stream)
+#               yield from yield_deltas(llm_stream)
 
 #            case "Search Files":
 #                response = self._chunks_service.retrieve_relevant(
 #                    text=message, limit=4, prev_next_chunks=0
 #                )
-#
+
 #                sources = Source.curate_sources(response)
-#
+
 #                yield "\n\n\n".join(
 #                    f"{index}. **{source.file} "
 #                    f"(page {source.page})**\n "
@@ -196,8 +199,8 @@ class PrivateGptUi:
             case "Query Files":
                 p = settings().ui.default_query_system_prompt
             # For chat mode, obtain default system prompt from settings
-#            case "LLM Chat (no context from files)":
-#                p = settings().ui.default_chat_system_prompt
+            #case "LLM Chat (no context from files)":
+            #    p = settings().ui.default_chat_system_prompt
             # For any other mode, clear the system prompt
             case _:
                 p = ""
@@ -477,6 +480,7 @@ class PrivateGptUi:
                             ),
                         ),
                         #additional_inputs=[mode, upload_button, system_prompt_input],
+                        additional_inputs=[mode],
                     )
         return blocks
 

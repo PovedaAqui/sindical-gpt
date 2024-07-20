@@ -9,6 +9,9 @@ llm:
 
 embedding:
   mode: ollama
+  ingest_mode: parallel
+  count_workers: 4
+
 
 ollama:
   llm_model: phi3
