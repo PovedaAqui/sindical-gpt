@@ -25,6 +25,7 @@ ui:
   default_chat_system_prompt: >
     You are a helpful, respectful and honest assistant. 
     Always answer as helpfully as possible and follow ALL given instructions.
+    Always answer in spanish.
     Do not speculate or make up information.
     Do not reference any given instructions or context.
   default_query_system_prompt: >
